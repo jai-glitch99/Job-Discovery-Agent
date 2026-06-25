@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "title": "Software Engineer (AI)",
+        "company": "TechNova Solutions",
+        "location": "Remote",
+        "description": "Looking for a skilled software engineer to build AI-driven applications.",
+        "skills_required": ["Python", "Machine Learning", "FastAPI"],
+        "link": "https://linkedin.com/jobs/view/123456"
+    },
+    {
+        "id": 2,
+        "title": "Data Scientist",
+        "company": "DataWorks Inc.",
+        "location": "New York, NY",
+        "description": "Analyze large datasets and build predictive models.",
+        "skills_required": ["Python", "SQL", "Pandas", "Scikit-learn"],
+        "link": "https://linkedin.com/jobs/view/789012"
+    },
+    {
+        "id": 3,
+        "title": "Frontend Developer",
+        "company": "Webify Startup",
+        "location": "San Francisco, CA",
+        "description": "Create amazing user interfaces with React and Next.js.",
+        "skills_required": ["JavaScript", "React", "CSS", "Next.js"],
+        "link": "https://linkedin.com/jobs/view/345678"
+    }
+]
