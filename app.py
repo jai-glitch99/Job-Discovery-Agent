@@ -9,6 +9,9 @@ def main():
     st.title("🕵️‍♂️ AI Job Discovery Agent")
     st.markdown("Welcome! This agent helps you find the best job matches based on your profile and preferences.")
     
+    st.sidebar.header("Settings")
+    api_key = st.sidebar.text_input("OpenAI API Key (Phase 2 Insights)", type="password")
+    
     st.sidebar.header("User Input")
     input_method = st.sidebar.radio("Choose Input Method", ("Upload Excel file", "Direct Text / LinkedIn URL"))
     
@@ -43,9 +46,9 @@ def main():
         if not parsed_data:
             st.warning("Please provide some input (Excel or Text) before discovering jobs.")
         else:
-            with st.spinner("Running AI Pipeline..."):
-                # Run the basic pipeline with mock data (Phase 1)
-                result = run_basic_pipeline(parsed_data)
+            with st.spinner("Running AI Pipeline... (this may take a moment if generating insights)"):
+                # Run the basic pipeline with mock data
+                result = run_basic_pipeline(parsed_data, api_key=api_key)
                 
             if result["status"] == "success":
                 st.subheader(result["message"])
@@ -62,6 +65,17 @@ def main():
                         st.write(f"**Description:** {job['description']}")
                         st.write(f"**Required Skills:** {', '.join(job['skills_required'])}")
                         st.markdown(f"[View Job / LinkedIn Link]({job['link']})")
+                        
+                        # Display Phase 2 AI Insights if available
+                        if "insights" in job:
+                            with st.expander("✨ AI Job Insights"):
+                                st.write(f"**Role Fit:** {job['insights'].get('role_fit', 'N/A')}")
+                                st.write(f"**Skills to Gain:** {job['insights'].get('skills_gained', 'N/A')}")
+                                st.write(f"**Work Culture:** {job['insights'].get('work_culture', 'N/A')}")
+                                st.write(f"**Career Path:** {job['insights'].get('career_path', 'N/A')}")
+                        elif api_key:
+                            st.warning("Insights could not be generated.")
+                        
                         st.divider()
 
 if __name__ == "__main__":

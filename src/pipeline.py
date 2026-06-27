@@ -1,5 +1,6 @@
 import json
 import os
+from src.ai_insights import generate_job_insights
 
 def load_mock_jobs():
     """Loads mock job data from the JSON file."""
@@ -14,17 +15,13 @@ def load_mock_jobs():
         print(f"Error loading mock data: {e}")
         return []
 
-def run_basic_pipeline(parsed_input):
+def run_basic_pipeline(parsed_input, api_key=None):
     """
-    Simulates the basic pipeline flow (Phase 1).
-    Takes parsed user input (Excel data or Text/URL) and returns relevant mock jobs.
+    Simulates the basic pipeline flow.
+    Takes parsed user input (Excel data or Text/URL) and returns relevant mock jobs,
+    along with AI generated insights if an API key is provided.
     """
     mock_jobs = load_mock_jobs()
-    
-    # In a real scenario (Phase 2 & 3), we would extract keywords from parsed_input using AI
-    # and match them against real job listings. 
-    # For Phase 1, we will just return the mock jobs to validate the flow.
-    # Optionally, we can do a very basic filter if skills are provided in text.
     
     matched_jobs = mock_jobs
     
@@ -42,6 +39,13 @@ def run_basic_pipeline(parsed_input):
             
             if filtered_jobs:
                 matched_jobs = filtered_jobs
+
+    # Phase 2: Add AI insights if API key is present
+    if api_key:
+        for job in matched_jobs:
+            insights = generate_job_insights(job, parsed_input.get("data"), api_key)
+            if insights:
+                job["insights"] = insights
 
     return {
         "status": "success",
