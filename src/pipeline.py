@@ -1,29 +1,17 @@
 import json
-import os
 from src.ai_insights import generate_job_insights
-
-def load_mock_jobs():
-    """Loads mock job data from the JSON file."""
-    # Build path to the data folder relative to this file
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    mock_file_path = os.path.join(base_dir, 'data', 'mock_jobs.json')
-    
-    try:
-        with open(mock_file_path, 'r') as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading mock data: {e}")
-        return []
+from src.scraper import scrape_wwr_jobs
 
 def run_basic_pipeline(parsed_input, api_key=None):
     """
-    Simulates the basic pipeline flow.
-    Takes parsed user input (Excel data or Text/URL) and returns relevant mock jobs,
+    Simulates the pipeline flow for Phase 3.
+    Takes parsed user input (Excel data or Text/URL) and fetches live scraped jobs,
     along with AI generated insights if an API key is provided.
     """
-    mock_jobs = load_mock_jobs()
+    # Fetch real live jobs instead of mock data
+    live_jobs = scrape_wwr_jobs()
     
-    matched_jobs = mock_jobs
+    matched_jobs = live_jobs
     
     if parsed_input.get("success"):
         # Let's say user typed some skills directly
@@ -31,7 +19,7 @@ def run_basic_pipeline(parsed_input, api_key=None):
             user_text = parsed_input["data"].lower()
             # Simple keyword matching
             filtered_jobs = []
-            for job in mock_jobs:
+            for job in live_jobs:
                 job_skills = [s.lower() for s in job.get("skills_required", [])]
                 # If any skill matches the text input
                 if any(skill in user_text for skill in job_skills):

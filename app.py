@@ -46,8 +46,8 @@ def main():
         if not parsed_data:
             st.warning("Please provide some input (Excel or Text) before discovering jobs.")
         else:
-            with st.spinner("Running AI Pipeline... (this may take a moment if generating insights)"):
-                # Run the basic pipeline with mock data
+            with st.spinner("Scraping live jobs and running AI Pipeline... (this may take a moment if generating insights)"):
+                # Run the basic pipeline with live data
                 result = run_basic_pipeline(parsed_data, api_key=api_key)
                 
             if result["status"] == "success":
@@ -55,7 +55,7 @@ def main():
                 jobs = result["jobs"]
                 
                 if not jobs:
-                    st.info("No matching jobs found in our mock database.")
+                    st.info("No matching jobs found on live job boards.")
                 
                 # Display jobs
                 for i, job in enumerate(jobs):
