@@ -61,6 +61,12 @@ def main():
                 for i, job in enumerate(jobs):
                     with st.container():
                         st.markdown(f"### {i+1}. {job['title']} at {job['company']}")
+                        
+                        # Display Relevance Score if available
+                        score = job.get('relevance_score')
+                        if score is not None:
+                            st.write(f"🔥 **Relevance Score:** {score}/100")
+                            
                         st.write(f"**Location:** {job['location']}")
                         st.write(f"**Description:** {job['description']}")
                         st.write(f"**Required Skills:** {', '.join(job['skills_required'])}")
