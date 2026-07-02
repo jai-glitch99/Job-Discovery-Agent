@@ -60,27 +60,39 @@ def main():
                 # Display jobs
                 for i, job in enumerate(jobs):
                     with st.container():
-                        st.markdown(f"### {i+1}. {job['title']} at {job['company']}")
+                        st.markdown(f"### {i+1}. {job['title']} @ {job['company']}")
                         
-                        # Display Relevance Score if available
-                        score = job.get('relevance_score')
-                        if score is not None:
-                            st.write(f"🔥 **Relevance Score:** {score}/100")
+                        col1, col2 = st.columns([2, 1])
+                        
+                        with col1:
+                            st.write(f"🌍 **Location:** {job['location']}")
                             
-                        st.write(f"**Location:** {job['location']}")
-                        st.write(f"**Description:** {job['description']}")
-                        st.write(f"**Required Skills:** {', '.join(job['skills_required'])}")
-                        st.markdown(f"[View Job / LinkedIn Link]({job['link']})")
+                            # Format skills as markdown tags
+                            skills_tags = " ".join([f"`{skill}`" for skill in job['skills_required']])
+                            st.write(f"🛠️ **Skills:** {skills_tags if skills_tags else 'Not specified'}")
+                            
+                            st.write(f"📄 {job['description']}")
+                            st.markdown(f"[🔗 Apply / View Job]({job.get('link', '#')})")
+                            
+                        with col2:
+                            score = job.get('relevance_score')
+                            if score is not None:
+                                st.metric(label="🔥 Relevance Score", value=f"{score}/100")
                         
-                        # Display Phase 2 AI Insights if available
+                        # Phase 2 & 5: Display AI Insights with clean UI
                         if "insights" in job:
-                            with st.expander("✨ AI Job Insights"):
-                                st.write(f"**Role Fit:** {job['insights'].get('role_fit', 'N/A')}")
-                                st.write(f"**Skills to Gain:** {job['insights'].get('skills_gained', 'N/A')}")
-                                st.write(f"**Work Culture:** {job['insights'].get('work_culture', 'N/A')}")
-                                st.write(f"**Career Path:** {job['insights'].get('career_path', 'N/A')}")
-                        elif api_key:
-                            st.warning("Insights could not be generated.")
+                            with st.expander("🤖 View AI Job Insights"):
+                                insights = job["insights"]
+                                
+                                st.success(f"**🎯 Role Fit:** {insights.get('role_fit', 'N/A')}")
+                                
+                                icol1, icol2 = st.columns(2)
+                                with icol1:
+                                    st.info(f"**📈 Skills to Gain:** {insights.get('skills_gained', 'N/A')}")
+                                with icol2:
+                                    st.info(f"**💼 Work Culture:** {insights.get('work_culture', 'N/A')}")
+                                    
+                                st.warning(f"**🚀 Career Path:** {insights.get('career_path', 'N/A')}")
                         
                         st.divider()
 
